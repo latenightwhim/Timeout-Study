@@ -1,0 +1,62 @@
+body{
+    margin: 0;
+    font-family: 'Consolas';
+    overflow: hidden;
+    user-select: none;
+}
+.timer-container{
+    height: 100vh;
+    color: gray;
+    background-color: lightgray;
+    line-height: 100vh;
+}
+.solved{
+    color: white;
+    background-color: lightgreen;
+}
+.time-low{
+    color: crimson;
+}
+.time-over{
+    color:white;
+    background-color: crimson;
+} 
+h1{
+    margin: 0;
+    text-align: center;
+    font-size: 25vw;
+}
+
+.ui-container{
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+}
+.ui-container > div{
+    margin: 10px;
+}
+.ui-container button{
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+.popup-container{
+    position: absolute;
+    top:calc(50% - 80px);
+    
+    height:80px;
+    text-align: center;
+    border: 1px black solid;
+    background-color: white;
+}
+.popup-container button{
+    height: 30px;
+    width: 60px;
+    outline: none;
+    border: 1px lightgray solid;
+    background-color: darkblue;
+    color: white;
+}
