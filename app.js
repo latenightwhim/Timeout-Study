@@ -1,95 +1,118 @@
-var timer = null
-var targetTime = 5 * 60 * 1000
-var previousTime
-var remainingTime = targetTime
-var solved = 0
+const MINUTE = 60 * 1000
+const SECOND = 1000
+const DEFAULT_TIME = 2 * MINUTE + 30 * SECOND
 
-document.querySelector('.timer-container').addEventListener('click', ()=> {
-  if(timer){
-    clearInterval(timer)
-    if(remainingTime > 0){
-      solved++
-      document.getElementById('solved').innerText = solved
-      styleTimer()
+const SUCCESS = "color: var(--white); background-color: var(--green);"
+const FAIL = "color: var(--black); background-color: var(--red);"
+
+var timerId = null
+var inputTime = DEFAULT_TIME
+var previousTimestamp
+var remainingTime = DEFAULT_TIME
+
+const main = document.querySelector('main')
+const timer = document.getElementById('timer')
+const resetBtn = document.getElementById('reset')
+const startBtn = document.getElementById('start')
+const stopBtn = document.getElementById('stop')
+const expandBtn = document.getElementById('expand')
+const compressBtn = document.getElementById('compress')
+const settingsBtn = document.getElementById('settings')
+
+function renderTimer(time)
+{
+    var minutes = String(Math.floor(Math.abs(time) / MINUTE))
+    var seconds = String(Math.floor((Math.abs(time) % MINUTE) / SECOND)).padStart(2, '0')
+    timer.innerText = `${minutes}:${seconds}`
+}
+
+function resetTimer()
+{
+    remainingTime = inputTime
+    renderTimer(remainingTime)
+
+    main.style = 
+    `
+        color: var(--black);
+        background-color: var(--gray);
+    `
+}
+
+function startTimer()
+{
+    if(timerId) return
+    
+    startBtn.hidden = true
+    stopBtn.hidden = false
+    settingsBtn.hidden = true
+
+    previousTimestamp = document.timeline.currentTime
+    timerId = requestAnimationFrame(updateTimer)
+}
+function startNewTimer()
+{
+    cancelAnimationFrame(timerId)
+    main.style = remainingTime > 0 ? SUCCESS : FAIL
+    setTimeout(() => {
+        timerId = null
+        resetTimer()
+        startTimer()
+    }, 750)
+}
+
+function updateTimer(timestamp)
+{
+    timerId = requestAnimationFrame(updateTimer)
+    var elapsedTime = timestamp - previousTimestamp
+    remainingTime -= elapsedTime;
+    renderTimer(remainingTime)
+    previousTimestamp = timestamp
+}
+
+function stopTimer()
+{
+    if(!timerId) return
+    
+    startBtn.hidden = false
+    stopBtn.hidden = true
+    settingsBtn.hidden = false
+
+    cancelAnimationFrame(timerId)
+    timerId = null
+}
+
+main.addEventListener('click', () => {
+    if(!timerId){
+        resetTimer()
+        startTimer()
+        return
     }
-    setTimeout(startNewTimer, 500)
-  }
-  startTimer()
+    startNewTimer()     
+})
+resetBtn.addEventListener('click', () => {
+    resetTimer()
+})
+startBtn.addEventListener('click', () => {
+    startTimer()
+})
+stopBtn.addEventListener('click', () => {
+    stopTimer()
+})
+expandBtn.addEventListener('click', () => {
+    expandBtn.hidden = true
+    compressBtn.hidden = false
+    document.documentElement.requestFullscreen();
+})
+compressBtn.addEventListener('click', () => {
+    expandBtn.hidden = false
+    compressBtn.hidden = true
+    document.exitFullscreen();
 })
 
-function startTimer(){
-  if(timer) return
-  previousTime = new Date().getTime()
-  timer = setInterval(updateTimer, 50)
-}
-function startNewTimer(){
-  if(!timer) return
-  remainingTime = targetTime
-  clearInterval(timer)
-  timer = null
-  startTimer()
-}
-function updateTimer(){
-  var currentTime = new Date().getTime()
-  var elapsedTime = currentTime - previousTime
-  remainingTime -= elapsedTime
-  previousTime = currentTime
-
-  styleTimer(remainingTime)
-  document.getElementById('timer').innerText = formatTime(Math.abs(remainingTime))
-}
-function stopTimer(){
-  if(!timer) return
-  clearInterval(timer)
-  timer = null
-}
-function formatTime(remainingTime) {
-    let hours = Math.floor(remainingTime / 3600000);
-    let minutes = Math.floor((remainingTime % 3600000) / 60000);
-    let seconds = Math.floor((remainingTime % 60000) / 1000);
-    let milliseconds = Math.floor((remainingTime % 1000) / 100);
-  
-    // Pad with '0' if necessary
-    const pad = (num) => (num < 10 ? `0${num}` : num);
-    if (hours > 0) {
-      return `${hours}:${pad(minutes)}:${pad(seconds)}`;
-    } else if (minutes > 0 || seconds >= 10) {
-      return `${minutes}:${pad(seconds)}`;
-    } else {
-      return `${seconds}.${milliseconds}`;
-    }
-}
-
-function styleTimer(remainingTime){
-  var timerContainer = document.querySelector('.timer-container')
-  if(!remainingTime){
-    timerContainer.classList.remove('time-low', 'time-over')
-    timerContainer.classList.add('solved')
-    return
-  }
-  if(remainingTime < 0){
-    timerContainer.classList.remove('solved', 'time-low')
-    timerContainer.classList.add('time-over')
-  }
-  else if(remainingTime < 10 * 1000){
-    timerContainer.classList.remove('solved', 'time-over')
-    timerContainer.classList.add('time-low')
-  }
-  else{
-    timerContainer.classList.remove('solved', 'time-low', 'time-over')
-  }
-}
-
-document.getElementById('settings').addEventListener('click', () => {
-  stopTimer()
-  document.querySelector('dialog').open = true
+settingsBtn.addEventListener('click', () => {
+    // temporary implementation
+    inputTime = Number(prompt("Adjust time (in seconds)", inputTime / SECOND)) * SECOND
+    if(!inputTime) inputTime = DEFAULT_TIME
+    resetTimer()
+    console.log(inputTime)
 })
-document.querySelector('dialog').addEventListener('submit', (event) => {
-  var form = event.target
-  var minutes = form[0].value
-  var seconds = form[1].value
-  remainingTime = targetTime = minutes * 60 * 1000 + seconds * 1000
-  document.getElementById('timer').innerText = formatTime(targetTime)
-})
-document.getElementById('pause').addEventListener('click', stopTimer)
-document.getElementById('pass').addEventListener('click', startNewTimer)
