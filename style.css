@@ -1,62 +1,58 @@
-body{
+:root {
+    --black: #292929;
+    --gray: #848484;
+    --white: #dedede;
+    --green: #7fa650;
+    --red: #ca3430;
+}
+
+body {
     margin: 0;
-    font-family: 'Consolas';
     overflow: hidden;
+    background-color: black;
     user-select: none;
 }
-.timer-container{
-    height: 100vh;
-    color: gray;
-    background-color: lightgray;
-    line-height: 100vh;
-}
-.solved{
-    color: white;
-    background-color: lightgreen;
-}
-.time-low{
-    color: crimson;
-}
-.time-over{
-    color:white;
-    background-color: crimson;
-} 
-h1{
-    margin: 0;
-    text-align: center;
-    font-size: 25vw;
-}
 
-.ui-container{
-    width: 100vw;
-    position: absolute;
-    top: 0;
-    display: flex;
-    justify-content: space-between;
-}
-.ui-container > div{
-    margin: 10px;
-}
-.ui-container button{
+button {
+    width: 10vh;
+    height: 10vh;
+    color: inherit;
+    background-color: inherit;
     outline: none;
     border: none;
-    background-color: transparent;
+    font-size: 5vh;
 }
 
-.popup-container{
+header {
     position: absolute;
-    top:calc(50% - 80px);
-    
-    height:80px;
-    text-align: center;
-    border: 1px black solid;
-    background-color: white;
+    width: 100vw;
+    height: 10vh;
+
+    display: flex;
+    justify-content: space-around;
+
+    color: var(--gray);
+    background-color: var(--black);
 }
-.popup-container button{
-    height: 30px;
-    width: 60px;
-    outline: none;
-    border: 1px lightgray solid;
-    background-color: darkblue;
-    color: white;
+
+main {
+    height: 100vh;
+    color: var(--black);
+    background-color: var(--gray);
+    text-align: center;
+    line-height: 100vh;
+}
+main strong {
+    font-size: 32vmin;
+}
+
+footer {
+    width: 10vh;
+    height: 10vh;
+    position: relative;
+    left: calc(50vw - 5vh);
+    bottom: 20vh;
+
+    text-align: center;
+    color: var(--black)
 }
