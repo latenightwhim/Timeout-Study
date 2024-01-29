@@ -14,19 +14,19 @@ body {
 }
 
 button {
-    width: 10vh;
-    height: 10vh;
+    width: 10dvh;
+    height: 10dvh;
     color: inherit;
     background-color: inherit;
     outline: none;
     border: none;
-    font-size: 5vh;
+    font-size: 5dvh;
 }
 
 header {
     position: absolute;
     width: 100vw;
-    height: 10vh;
+    height: 10dvh;
 
     display: flex;
     justify-content: space-around;
@@ -36,7 +36,7 @@ header {
 }
 
 main {
-    height: 100vh;
+    height: 100dvh;
     color: var(--black);
     background-color: var(--gray);
     text-align: center;
@@ -47,11 +47,11 @@ main strong {
 }
 
 footer {
-    width: 10vh;
-    height: 10vh;
+    width: 10dvh;
+    height: 10dvh;
     position: relative;
-    left: calc(50vw - 5vh);
-    bottom: 20vh;
+    left: calc(50vw - 5dvh);
+    bottom: 20dvh;
 
     text-align: center;
     color: var(--black)
